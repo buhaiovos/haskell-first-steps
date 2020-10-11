@@ -15,7 +15,7 @@ dispatch = [
            ,("view", view)
            ,("remove", remove)
            ,("bump", bump)
-           ,("done", markAsCompleted)
+           ,("done", complete)
            ]
 
 makeLine :: String -> String
@@ -64,8 +64,8 @@ bump [fileName, indexStr] = do
 checkMark :: Char
 checkMark = '✔'
 
-markAsCompleted :: [String] -> IO ()
-markAsCompleted [fileName, indexStr] = do
+complete :: [String] -> IO ()
+complete [fileName, indexStr] = do
   handle <- openFile fileName ReadMode
   (tempName, tempHandle) <- openTempFile "." "temp"
   contents <- hGetContents handle
