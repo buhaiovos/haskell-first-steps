@@ -1,5 +1,6 @@
 *.hi
 *.o
 .idea/
+build/
 mytodos
 todo-finale
