@@ -14,6 +14,8 @@ dispatch = [
             ("add", add)
            ,("view", view)
            ,("remove", remove)
+           ,("bump", bump)
+           ,("done", markAsCompleted)
            ]
 
 makeLine :: String -> String
@@ -38,6 +40,41 @@ remove [fileName, indexStr] = do
       todos = lines contents
       newTodos = delete (todos !! index) todos
   hPutStr tempHandle $ unlines newTodos
+  hClose handle
+  hClose tempHandle
+  removeFile fileName
+  renameFile tempName fileName
+
+bump :: [String] -> IO ()
+bump [fileName, indexStr] = do
+  handle <- openFile fileName ReadMode
+  (tempName, tempHandle) <- openTempFile "." "temp"
+  contents <- hGetContents handle
+  let index = read indexStr
+      todos = lines contents
+      bumped = todos !! index
+      todosWithoutBumbed = delete bumped todos
+      newTodos = bumped : todosWithoutBumbed
+  hPutStr tempHandle $ unlines newTodos
+  hClose handle
+  hClose tempHandle
+  removeFile fileName
+  renameFile tempName fileName
+
+checkMark :: Char
+checkMark = '✔'
+
+markAsCompleted :: [String] -> IO ()
+markAsCompleted [fileName, indexStr] = do
+  handle <- openFile fileName ReadMode
+  (tempName, tempHandle) <- openTempFile "." "temp"
+  contents <- hGetContents handle
+  let index = read indexStr
+      todos = lines contents
+      updatedTodos = zipWith (\i line -> if i == index
+                                           then checkMark:' ':'-':' ':line
+                                           else line) [0..] todos
+  hPutStr tempHandle $ unlines updatedTodos
   hClose handle
   hClose tempHandle
   removeFile fileName
