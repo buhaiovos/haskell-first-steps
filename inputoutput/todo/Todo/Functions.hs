@@ -10,8 +10,7 @@ import System.IO
 import Data.List
 
 dispatch :: [(String, [String] -> IO ())]
-dispatch = [
-            ("add", add)
+dispatch = [("add", add)
            ,("view", view)
            ,("remove", remove)
            ,("bump", bump)
