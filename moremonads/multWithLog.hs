@@ -11,7 +11,7 @@ multWithLog = do
   return (a * b)
 
 multWithLog' :: Writer [String] Int
-multWithLog' = logNumber 3 >>= (\x ->
-               logNumber 5 >>= (\y ->
+multWithLog' = logNumber 3 >>= (\a ->
+               logNumber 5 >>= (\b ->
                tell ["Gonna multiply these 2"] >>= (\_ ->
-               return (x * y))))
+               return (a * b))))
