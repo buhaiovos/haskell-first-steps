@@ -4,7 +4,7 @@ fmap :: (a -> b) -> f a -> f b
 -- Functor f => Applicative f
 pure :: a -> f a
 (<*>) :: f (a -> b) -> f a -> f b
-(<$>) :: (Functor f) => (a -> b) -> f a -> f b
+(<$>) :: (a -> b) -> f a -> f b
 f <$> x = fmap f x
 
 -- Semigroup a
